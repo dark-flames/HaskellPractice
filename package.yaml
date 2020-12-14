@@ -1,0 +1,36 @@
+name:                HaskellPractice
+version:             0.1.0.0
+github:              "githubuser/HaskellPractice"
+license:             BSD3
+author:              "dark-flames"
+maintainer:          "dark_flames@outlook.com"
+copyright:           "2020 dark-flames"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/githubuser/HaskellPractice#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+
+library:
+  source-dirs: src
+  exposed-modules:
+    - Option
+
+tests:
+  option-test:
+    main:                OptionTest.hs
+    source-dirs:         test
+    dependencies:
+    - HaskellPractice
+    - HUnit
