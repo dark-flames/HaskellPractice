@@ -26,6 +26,7 @@ source-repository head
 library
   exposed-modules:
       Option
+      SpliteLines
   other-modules:
       Paths_HaskellPractice
   hs-source-dirs:
@@ -34,10 +35,12 @@ library
       base >=4.7 && <5
   default-language: Haskell2010
 
-test-suite option-test
+test-suite unit-test
   type: exitcode-stdio-1.0
-  main-is: OptionTest.hs
+  main-is: Main.hs
   other-modules:
+      OptionTest
+      SpliteLinesTest
       Paths_HaskellPractice
   hs-source-dirs:
       test

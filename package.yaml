@@ -26,10 +26,11 @@ library:
   source-dirs: src
   exposed-modules:
     - Option
+    - SpliteLines
 
 tests:
-  option-test:
-    main:                OptionTest.hs
+  unit-test:
+    main:                Main.hs
     source-dirs:         test
     dependencies:
     - HaskellPractice

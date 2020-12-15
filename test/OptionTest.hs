@@ -1,4 +1,4 @@
-module Main where
+module OptionTest(optionCases) where
 
 import Option
 import Test.HUnit
@@ -23,10 +23,11 @@ testOptionMapNone = TestCase (
     (None)
     (optionMap (None) mapFunc))
 
-main :: IO Counts
-main = runTestTT (TestList [
+optionCases = [
     testIsSomeTrue,
     testIsSomeFalse,
     testOptionMapFalse, 
     testOptionMapTrue, 
-    testOptionMapNone])
+    testOptionMapNone]
+
+
