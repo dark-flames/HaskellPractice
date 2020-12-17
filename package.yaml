@@ -27,6 +27,7 @@ library:
   exposed-modules:
     - Option
     - SpliteLines
+    - List
 
 tests:
   unit-test:

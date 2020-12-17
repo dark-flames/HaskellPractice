@@ -27,6 +27,7 @@ library
   exposed-modules:
       Option
       SpliteLines
+      List
   other-modules:
       Paths_HaskellPractice
   hs-source-dirs:
@@ -39,6 +40,7 @@ test-suite unit-test
   type: exitcode-stdio-1.0
   main-is: Main.hs
   other-modules:
+      ListTest
       OptionTest
       SpliteLinesTest
       Paths_HaskellPractice
