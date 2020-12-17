@@ -1,14 +1,21 @@
-module List(listLength, listMap, headOption, listReverse, listTake, spliteAt) where
+module List(listLength, listMap, listFilter, headOption, listReverse, listTake, spliteAt) where
 
 import Option
 
 listLength :: [a] -> Int
 listLength [] = 0
-listLength (x:xs) = (listLength xs) + 1
+listLength (x : xs) = (listLength xs) + 1
 
 listMap :: [a] -> (a -> b) -> [b]
 listMap [] _ = []
-listMap (item:rest) func = func(item):(listMap rest func)
+listMap (item : rest) func = func(item) : (listMap rest func)
+
+listFilter :: [a] -> (a -> Bool) -> [a]
+listFilter [] _ = []
+listFilter (item : rest) filter = if filter item then
+        item : (listFilter rest filter)
+    else
+        (listFilter rest filter)
 
 headOption :: [a] -> Option a
 headOption [] = None
@@ -16,7 +23,7 @@ headOption (head : tail) = Some head
 
 listTail :: [a] -> [a]
 listTail [] = []
-listTail (head:rest) = rest
+listTail (head : rest) = rest
 
 listReverse:: [a] -> [a]
 listReverse [] = []

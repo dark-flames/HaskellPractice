@@ -11,6 +11,8 @@ func:: Int -> Int
 func a = a + 1
 listMapTest = TestCase (assertEqual "Test listMap" [2, 3, 4, 5] (listMap [1, 2, 3, 4] func))
 
+listFilterTest = TestCase (assertEqual "Test listFilter" [1, 3] (listFilter [1, 2, 3, 4] odd))
+
 headOptionTest1 = TestCase (assertEqual "Test headOption for empty list" (None) (headOption ([]::[Int])))
 headOptionTest2 = TestCase (assertEqual "Test headOption for [1, 2, 3]" (Some 1) (headOption [1, 2, 3]))
 
@@ -25,6 +27,7 @@ spliteAtTest = TestCase (assertEqual "Test spliteAt" ([1, 2, 3], [4, 5]) (splite
 listTestCases = [
     listLengthTest,
     listMapTest, 
+    listFilterTest,
     headOptionTest1, 
     headOptionTest2, 
     listReverseTest, 
