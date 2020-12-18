@@ -28,6 +28,7 @@ library:
     - Option
     - SpliteLines
     - List
+    - Convert
 
 tests:
   unit-test:

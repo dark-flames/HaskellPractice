@@ -7,9 +7,8 @@ import Option
 listLengthTest = TestCase (assertEqual "Test listLength" 4 (listLength [1, 1, 1, 1]))
 
 
-func:: Int -> Int
-func a = a + 1
 listMapTest = TestCase (assertEqual "Test listMap" [2, 3, 4, 5] (listMap [1, 2, 3, 4] func))
+    where func a = a + 1
 
 listFilterTest = TestCase (assertEqual "Test listFilter" [1, 3] (listFilter [1, 2, 3, 4] odd))
 

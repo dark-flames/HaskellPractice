@@ -28,6 +28,7 @@ library
       Option
       SpliteLines
       List
+      Convert
   other-modules:
       Paths_HaskellPractice
   hs-source-dirs:
@@ -40,6 +41,7 @@ test-suite unit-test
   type: exitcode-stdio-1.0
   main-is: Main.hs
   other-modules:
+      ConvertTest
       ListTest
       OptionTest
       SpliteLinesTest
