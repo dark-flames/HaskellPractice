@@ -12,6 +12,9 @@ listMapTest = TestCase (assertEqual "Test listMap" [2, 3, 4, 5] (listMap [1, 2, 
 
 listFilterTest = TestCase (assertEqual "Test listFilter" [1, 3] (listFilter [1, 2, 3, 4] odd))
 
+listReduceTest = TestCase (assertEqual "Test reduce" 15 (listReduce [1, 2, 3, 4, 5] foldFunc 0))
+    where foldFunc a b = a + b
+
 headOptionTest1 = TestCase (assertEqual "Test headOption for empty list" (None) (headOption ([]::[Int])))
 headOptionTest2 = TestCase (assertEqual "Test headOption for [1, 2, 3]" (Some 1) (headOption [1, 2, 3]))
 
@@ -27,6 +30,7 @@ listTestCases = [
     listLengthTest,
     listMapTest, 
     listFilterTest,
+    listReduceTest,
     headOptionTest1, 
     headOptionTest2, 
     listReverseTest, 

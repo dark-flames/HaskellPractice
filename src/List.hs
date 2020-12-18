@@ -1,4 +1,4 @@
-module List(listLength, listMap, listFilter, headOption, listReverse, listTake, spliteAt) where
+module List(listLength, listMap, listFilter, listReduce, headOption, listReverse, listTake, spliteAt) where
 
 import Option
 
@@ -16,6 +16,11 @@ listFilter (item : rest) filter = if filter item then
         item : (listFilter rest filter)
     else
         (listFilter rest filter)
+
+listReduce :: [a] -> (b -> a -> b) -> b -> b
+listReduce [] _ init = init
+listReduce (item : rest) func init = (listReduce rest func newInit) where
+    newInit = func init item
 
 headOption :: [a] -> Option a
 headOption [] = None
