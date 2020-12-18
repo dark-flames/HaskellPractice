@@ -29,6 +29,7 @@ library:
     - SpliteLines
     - List
     - Convert
+    - Json
 
 tests:
   unit-test:

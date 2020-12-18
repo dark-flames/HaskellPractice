@@ -29,6 +29,7 @@ library
       SpliteLines
       List
       Convert
+      Json
   other-modules:
       Paths_HaskellPractice
   hs-source-dirs:
@@ -42,6 +43,7 @@ test-suite unit-test
   main-is: Main.hs
   other-modules:
       ConvertTest
+      JsonTest
       ListTest
       OptionTest
       SpliteLinesTest
