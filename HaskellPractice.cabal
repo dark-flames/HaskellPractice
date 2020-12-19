@@ -49,7 +49,7 @@ test-suite unit-test
       SpliteLinesTest
       Paths_HaskellPractice
   hs-source-dirs:
-      test
+      tests
   build-depends:
       HUnit
     , HaskellPractice

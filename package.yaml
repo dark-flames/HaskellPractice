@@ -34,7 +34,7 @@ library:
 tests:
   unit-test:
     main:                Main.hs
-    source-dirs:         test
+    source-dirs:         tests
     dependencies:
     - HaskellPractice
     - HUnit

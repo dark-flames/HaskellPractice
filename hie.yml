@@ -1,0 +1,8 @@
+cradle:
+  stack:
+    stackYaml: "stack.yaml"
+    components:
+      - path: "./src"
+        component: "HaskellPractice:lib"
+      - path: "./tests"
+        component: "HaskellPractice:test:unit-test"

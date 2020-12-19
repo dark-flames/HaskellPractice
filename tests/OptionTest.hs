@@ -3,9 +3,10 @@ module OptionTest(optionCases) where
 import Option
 import Test.HUnit
 
+testIsSomeTrue :: Test
 testIsSomeTrue = TestCase (assertEqual "Test isSome for NoNone" True (isSome(Some "test")))
 
-testIsSomeFalse = TestCase (assertEqual "Test isSome for None" False (isSome(None)))
+testIsSomeFalse = TestCase (assertEqual "Test isSome for None" False (isSome None))
 
 mapFunc num = num == 0
 testOptionMapFalse = TestCase (
@@ -20,8 +21,8 @@ testOptionMapTrue = TestCase (
 
 testOptionMapNone = TestCase (
     assertEqual "Test optionMap for None"
-    (None)
-    (optionMap (None) mapFunc))
+    None
+    (optionMap None mapFunc))
 
 optionCases = [
     testIsSomeTrue,
