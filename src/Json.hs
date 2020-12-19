@@ -9,7 +9,7 @@ data JsonValue = JsonObject [(String, JsonValue)]
     | JsonNull
 
 showPair :: (String, JsonValue) -> String
-showPair (key, value)  = "\"" ++ key ++ "\":" ++ (show value)
+showPair (key, value)  = "\"" ++ key ++ "\":" ++ show value
 
 commaJoin :: String -> String -> String
 commaJoin "" item = item
@@ -19,11 +19,11 @@ isInt:: Double -> Bool
 isInt x = x == fromInteger (round x)
 
 instance Show JsonValue where
-    show (JsonNull) = "null"
+    show JsonNull = "null"
     show (JsonBool nested) = if nested then "true" else "false"
-    show (JsonNumber nested) = if (isInt nested) then show (round nested)else show nested
+    show (JsonNumber nested) = if isInt nested then show (round nested)else show nested
     show (JsonString nested) = "\"" ++ nested ++ "\""
     show (JsonList list) = "[" ++ content ++ "]" where
-        content = listReduce (listMap list show) commaJoin "" where
+        content = listReduce (listMap list show) commaJoin ""
     show (JsonObject objectList) = "{" ++ content ++ "}" where
         content = listReduce (listMap objectList showPair) commaJoin ""
