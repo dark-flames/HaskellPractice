@@ -1,14 +1,21 @@
-module Json(JsonValue(JsonObject, JsonList, JsonString, JsonNumber, JsonBool, JsonNull)) where
+module Json(
+    JsonValue(JsonObject, JsonList, JsonString, JsonNumber, JsonBool, JsonNull),
+    unwrapAsObject,
+    unwrapAsList
+    ) where
 
 import List
-data JsonValue = JsonObject [(String, JsonValue)] 
+import Option
+
+type NamedValue = (String, JsonValue)
+data JsonValue = JsonObject [NamedValue] 
     | JsonList [JsonValue]
     | JsonString String
     | JsonNumber Double
     | JsonBool Bool
     | JsonNull
 
-showPair :: (String, JsonValue) -> String
+showPair :: NamedValue -> String
 showPair (key, value)  = "\"" ++ key ++ "\":" ++ show value
 
 commaJoin :: String -> String -> String
@@ -27,3 +34,11 @@ instance Show JsonValue where
         content = listReduce (listMap list show) commaJoin ""
     show (JsonObject objectList) = "{" ++ content ++ "}" where
         content = listReduce (listMap objectList showPair) commaJoin ""
+
+unwrapAsObject :: JsonValue -> Option  [NamedValue]
+unwrapAsObject (JsonObject objectList) = Some objectList
+unwrapAsObject _ = None 
+
+unwrapAsList :: JsonValue -> Option [JsonValue]
+unwrapAsList (JsonList list) = Some list
+unwrapAsList _ = None
