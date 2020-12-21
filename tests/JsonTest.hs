@@ -19,6 +19,10 @@ getCharTest3 = TestCase (assertEqual "Test get char" (Nothing , "") (getCharacte
 
 getAsStrTest1 = TestCase (assertEqual "Test get as str" (Nothing , "abc\\\"d") (getAsStr "abc\\\"d"))
 getAsStrTest2 = TestCase (assertEqual "Test get as str" (Just "abc" , "d") (getAsStr "abc\"d"))
+getAsNumTest1 = TestCase (assertEqual "Test get as num" ("114.514" , "asdasd") (getAsNum "114.514asdasd"))
+getAsNumTest2 = TestCase (assertEqual "Test get as num" ("114.514" , "") (getAsNum "114.514"))
+
+getAsNumTest3= TestCase (assertEqual "Test get as num" ("" , "aa114.514") (getAsNum "aa114.514"))
 
 jsonTestCases = [
     showTest,
@@ -26,4 +30,7 @@ jsonTestCases = [
     getCharTest2,
     getCharTest3,
     getAsStrTest1,
-    getAsStrTest2]
+    getAsStrTest2,
+    getAsNumTest1,
+    getAsNumTest2,
+    getAsNumTest3]

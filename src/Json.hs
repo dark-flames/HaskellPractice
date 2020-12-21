@@ -3,11 +3,12 @@ module Json(
     unwrapAsObject,
     unwrapAsList,
     getCharacter,
-    getAsStr
-    ) where
+    getAsStr,
+    getAsNum) where
 
 import Data.List
 import Data.Maybe
+import Data.Char
 import List
 
 type NamedValue = (String, JsonValue)
@@ -75,3 +76,9 @@ getAsStr context = let
             (Just (fromJust char ++ fromJust nextStr), nextRest)
         else (Nothing, context)
     else (Nothing, context)
+
+getAsNum :: String -> (String, String)
+getAsNum "" = ("", "")
+getAsNum (c : rest) | isDigit c || c == '.' = let (nextNum, nextRest) = getAsNum rest
+        in (c : nextNum, nextRest)
+getAsNum context = ("", context)
