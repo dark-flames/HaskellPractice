@@ -13,4 +13,17 @@ testCaseShowResult = "{\"List1\":[true,false,null,114514],\"List2\":[[true,false
 
 showTest = TestCase (assertEqual "Test json show" testCaseShowResult (show testCaseShow))
 
-jsonTestCases = [showTest]
+getCharTest1 = TestCase (assertEqual "Test get char" (Just "\\n", " aa") (getCharacter "\\n aa"))
+getCharTest2 = TestCase (assertEqual "Test get char" (Just "\\n", "") (getCharacter "\\n"))
+getCharTest3 = TestCase (assertEqual "Test get char" (Nothing , "") (getCharacter ""))
+
+getAsStrTest1 = TestCase (assertEqual "Test get as str" (Nothing , "abc\\\"d") (getAsStr "abc\\\"d"))
+getAsStrTest2 = TestCase (assertEqual "Test get as str" (Just "abc" , "d") (getAsStr "abc\"d"))
+
+jsonTestCases = [
+    showTest,
+    getCharTest1,
+    getCharTest2,
+    getCharTest3,
+    getAsStrTest1,
+    getAsStrTest2]

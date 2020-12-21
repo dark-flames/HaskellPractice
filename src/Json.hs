@@ -1,11 +1,14 @@
 module Json(
     JsonValue(JsonObject, JsonList, JsonString, JsonNumber, JsonBool, JsonNull),
     unwrapAsObject,
-    unwrapAsList
+    unwrapAsList,
+    getCharacter,
+    getAsStr
     ) where
 
+import Data.List
+import Data.Maybe
 import List
-import Option
 
 type NamedValue = (String, JsonValue)
 data JsonValue = JsonObject [NamedValue] 
@@ -35,10 +38,40 @@ instance Show JsonValue where
     show (JsonObject objectList) = "{" ++ content ++ "}" where
         content = listReduce (listMap objectList showPair) commaJoin ""
 
-unwrapAsObject :: JsonValue -> Option  [NamedValue]
-unwrapAsObject (JsonObject objectList) = Some objectList
-unwrapAsObject _ = None 
+unwrapAsObject :: JsonValue -> Maybe [NamedValue]
+unwrapAsObject (JsonObject objectList) = Just objectList
+unwrapAsObject _ = Nothing
 
-unwrapAsList :: JsonValue -> Option [JsonValue]
-unwrapAsList (JsonList list) = Some list
-unwrapAsList _ = None
+unwrapAsList :: JsonValue -> Maybe [JsonValue]
+unwrapAsList (JsonList list) = Just list
+unwrapAsList _ = Nothing
+
+data JsonToken = Str String
+    | SquareBracket [JsonToken]
+    | CurlyBracket [JsonToken]
+    | Lit String
+
+
+getCharacter :: String -> (Maybe String, String)
+getCharacter "" = (Nothing, "")
+getCharacter ('\\' : rest) = let 
+    (next, nextRest) = getCharacter rest
+    in if isJust next then
+        (Just ('\\': fromJust next), nextRest)
+    else
+        (Just "\\", nextRest)
+getCharacter (c : rest) = (Just [c], rest)
+
+getAsStr:: String -> (Maybe String, String)
+getAsStr "" = (Nothing, "")
+getAsStr context = let
+    (char, rest) = getCharacter context
+    in if isJust char then
+        if char == Just "\"" || char == Just "\"" then
+            (Just "", rest)
+        else let
+            (nextStr, nextRest) = getAsStr rest 
+        in if isJust nextStr then
+            (Just (fromJust char ++ fromJust nextStr), nextRest)
+        else (Nothing, context)
+    else (Nothing, context)
