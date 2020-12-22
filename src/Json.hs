@@ -47,11 +47,6 @@ unwrapAsList :: JsonValue -> Maybe [JsonValue]
 unwrapAsList (JsonList list) = Just list
 unwrapAsList _ = Nothing
 
-data JsonToken = Str String
-    | SquareBracket [JsonToken]
-    | CurlyBracket [JsonToken]
-    | Lit String
-
 
 getCharacter :: String -> (Maybe String, String)
 getCharacter "" = (Nothing, "")
@@ -82,3 +77,45 @@ getAsNum "" = ("", "")
 getAsNum (c : rest) | isDigit c || c == '.' = let (nextNum, nextRest) = getAsNum rest
         in (c : nextNum, nextRest)
 getAsNum context = ("", context)
+
+getAsList:: String -> (Maybe [JsonValue], String)
+getAsList context = (Nothing, context)
+-- todo
+
+getAsObject:: String -> (Maybe [NamedValue], String)
+getAsObject context = (Nothing, context)
+--todo
+
+getItem:: String -> (Maybe JsonValue, String)
+getItem context = let (maybeC, rest) = getCharacter context
+    in if isJust maybeC then
+        let c = fromJust maybeC
+        in if c == "\"" then
+            let (maybeStr, strRest) = getAsStr rest
+            in if isJust maybeStr then
+                (Just (JsonString (fromJust maybeStr)), strRest)
+            else
+                (Nothing, context)
+        else if isDigit (head c) then
+            let (numStr, numRest) = getAsNum context
+            in (Just (JsonNumber (read numStr)), numRest)
+        else if take 4 context == "null" then
+            (Just JsonNull, drop 4 context)
+        else if take 4 context == "true" then
+            (Just (JsonBool True) , drop 4 context)
+        else if take 5 context == "false" then
+            (Just (JsonBool False)  , drop 5 context)
+        else if c == " " || c == "\r" || c == "\n" then
+            getItem rest
+        else if c == "[" then
+            let (maybeList, listRest) = getAsList rest
+            in if isJust maybeList then
+                (Just (JsonList (fromJust maybeList)), listRest)
+            else (Nothing, context)
+        else if c == "{" then
+            let (maybeObject, objectRest) = getAsObject rest
+            in if isJust maybeObject then
+                (Just (JsonObject (fromJust maybeObject)), objectRest)
+            else (Nothing, context)
+        else (Nothing, context)
+    else (Nothing, context)
