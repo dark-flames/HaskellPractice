@@ -87,27 +87,58 @@ popChar c  context = let (frontMaybe, rest) = getCharacter context
         Just " " -> popChar c rest
         _ -> Nothing
 
-getAsList:: String -> (Maybe [JsonValue], String)
-getAsList context = let (itemMaybe, rest) = getItem context
-    in if isJust itemMaybe then
-        let restWithouCommaMaybe = popChar "," rest
-        in if isJust restWithouCommaMaybe then
-            let (nextList, nestRest) = getAsList (fromJust restWithouCommaMaybe)
+getAsList :: String -> (Maybe [JsonValue], String)
+getAsList context = let (item, rest) = getItem context
+    in if isJust item then
+        let restWithouComma = popChar "," rest
+        in if isJust restWithouComma then
+            let (nextList, nestRest) = getAsList (fromJust restWithouComma)
             in if isJust nextList then
-                (Just (fromJust itemMaybe:fromJust nextList), nestRest)
+                (Just (fromJust item:fromJust nextList), nestRest)
             else (Nothing, context)
         else let restWithoutBracket = popChar "]" rest
             in if isJust restWithoutBracket then
-                (Just [fromJust itemMaybe], fromJust restWithoutBracket)
+                (Just [fromJust item], fromJust restWithoutBracket)
             else (Nothing, context)
     else let restWithoutBracket = popChar "]" rest
-            in if isJust restWithoutBracket then
-                (Just [], fromJust restWithoutBracket)
-            else (Nothing, context)
+        in if isJust restWithoutBracket then
+            (Just [], fromJust restWithoutBracket)
+        else (Nothing, context)
 
-getAsObject:: String -> (Maybe [NamedValue], String)
-getAsObject context = (Nothing, context)
---todo
+readPair :: String -> (Maybe NamedValue, String)
+readPair context = let contextWithoutQuotation = popChar "\"" context
+    in if isJust contextWithoutQuotation then
+        let (name, nameRest) = getAsStr (fromJust contextWithoutQuotation)
+        in if isJust name then
+            let contentWithoutColon = popChar ":" nameRest
+            in if isJust contentWithoutColon then
+                let (item, rest) = getItem (fromJust contentWithoutColon)
+                in if isJust item then
+                    (Just (fromJust name, fromJust item), rest)
+                else (Nothing, context)
+            else (Nothing, context)
+        else (Nothing, context)
+    else (Nothing, context)
+
+
+getAsObject :: String -> (Maybe [NamedValue], String)
+getAsObject context = let (pair, rest) = readPair context
+    in if isJust pair then
+        let restWithouComma = popChar "," rest
+        in if isJust restWithouComma then
+            let (next, nestRest) = getAsObject(fromJust restWithouComma)
+            in if isJust next then
+                (Just (fromJust pair:fromJust next), nestRest)
+            else (Nothing, context)
+        else let restWithoutBracket = popChar "]" rest
+            in if isJust restWithoutBracket then
+                (Just [fromJust pair], fromJust restWithoutBracket)
+            else (Nothing, context)
+    else let restWithoutBracket = popChar "]" rest
+        in if isJust restWithoutBracket then
+            (Just [fromJust pair], fromJust restWithoutBracket)
+        else (Nothing, context)
+
 
 getItem:: String -> (Maybe JsonValue, String)
 getItem context = let (maybeC, rest) = getCharacter context
