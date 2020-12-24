@@ -78,9 +78,32 @@ getAsNum (c : rest) | isDigit c || c == '.' = let (nextNum, nextRest) = getAsNum
         in (c : nextNum, nextRest)
 getAsNum context = ("", context)
 
+popChar :: String -> String -> Maybe String
+popChar c  context = let (frontMaybe, rest) = getCharacter context
+    in case frontMaybe  of 
+        Just c -> Just rest
+        Just "\n" -> popChar c rest 
+        Just "\r" -> popChar c rest
+        Just " " -> popChar c rest
+        _ -> Nothing
+
 getAsList:: String -> (Maybe [JsonValue], String)
-getAsList context = (Nothing, context)
--- todo
+getAsList context = let (itemMaybe, rest) = getItem context
+    in if isJust itemMaybe then
+        let restWithouCommaMaybe = popChar "," rest
+        in if isJust restWithouCommaMaybe then
+            let (nextList, nestRest) = getAsList (fromJust restWithouCommaMaybe)
+            in if isJust nextList then
+                (Just (fromJust itemMaybe:fromJust nextList), nestRest)
+            else (Nothing, context)
+        else let restWithoutBracket = popChar "]" rest
+            in if isJust restWithoutBracket then
+                (Just [fromJust itemMaybe], fromJust restWithoutBracket)
+            else (Nothing, context)
+    else let restWithoutBracket = popChar "]" rest
+            in if isJust restWithoutBracket then
+                (Just [], fromJust restWithoutBracket)
+            else (Nothing, context)
 
 getAsObject:: String -> (Maybe [NamedValue], String)
 getAsObject context = (Nothing, context)
