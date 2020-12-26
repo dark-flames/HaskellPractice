@@ -82,8 +82,8 @@ getAsNum (c : rest) | isDigit c || c == '.' = let (nextNum, nextRest) = getAsNum
 getAsNum context = ("", context)
 
 popChar :: String -> String -> Maybe String
-popChar c  context = let (frontMaybe, rest) = getCharacter context
-    in case frontMaybe  of 
+popChar c  context = let (front, rest) = getCharacter context
+    in case front  of 
         Just i | i == "\n" || i == "\r" || i == " " -> popChar c rest
         Just i | i == c -> Just rest
         _ -> Nothing
@@ -146,9 +146,9 @@ getItem context = let (maybeC, rest) = getCharacter context
     in if isJust maybeC then
         let c = fromJust maybeC
         in if c == "\"" then
-            let (maybeStr, strRest) = getAsStr rest
-            in if isJust maybeStr then
-                (Just (JsonString (fromJust maybeStr)), strRest)
+            let (str, strRest) = getAsStr rest
+            in if isJust str then
+                (Just (JsonString (fromJust str)), strRest)
             else
                 (Nothing, context)
         else if isDigit (head c) then
@@ -163,14 +163,14 @@ getItem context = let (maybeC, rest) = getCharacter context
         else if c == " " || c == "\r" || c == "\n" then
             getItem rest
         else if c == "[" then
-            let (maybeList, listRest) = getAsList rest
-            in if isJust maybeList then
-                (Just (JsonList (fromJust maybeList)), listRest)
+            let (list, listRest) = getAsList rest
+            in if isJust list then
+                (Just (JsonList (fromJust list)), listRest)
             else (Nothing, context)
         else if c == "{" then
-            let (maybeObject, objectRest) = getAsObject rest
-            in if isJust maybeObject then
-                (Just (JsonObject (fromJust maybeObject)), objectRest)
+            let (object, objectRest) = getAsObject rest
+            in if isJust object then
+                (Just (JsonObject (fromJust object)), objectRest)
             else (Nothing, context)
         else (Nothing, context)
     else (Nothing, context)
