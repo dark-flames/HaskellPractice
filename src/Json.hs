@@ -4,6 +4,9 @@ module Json(
     unwrapAsList,
     getCharacter,
     getAsStr,
+    getItem,
+    popChar,
+    readPair,
     getAsNum) where
 
 import Data.List
@@ -17,7 +20,7 @@ data JsonValue = JsonObject [NamedValue]
     | JsonString String
     | JsonNumber Double
     | JsonBool Bool
-    | JsonNull
+    | JsonNull deriving(Eq)
 
 showPair :: NamedValue -> String
 showPair (key, value)  = "\"" ++ key ++ "\":" ++ show value
@@ -81,10 +84,8 @@ getAsNum context = ("", context)
 popChar :: String -> String -> Maybe String
 popChar c  context = let (frontMaybe, rest) = getCharacter context
     in case frontMaybe  of 
-        Just c -> Just rest
-        Just "\n" -> popChar c rest 
-        Just "\r" -> popChar c rest
-        Just " " -> popChar c rest
+        Just i | i == "\n" || i == "\r" || i == " " -> popChar c rest
+        Just i | i == c -> Just rest
         _ -> Nothing
 
 getAsList :: String -> (Maybe [JsonValue], String)
@@ -130,11 +131,11 @@ getAsObject context = let (pair, rest) = readPair context
             in if isJust next then
                 (Just (fromJust pair:fromJust next), nestRest)
             else (Nothing, context)
-        else let restWithoutBracket = popChar "]" rest
+        else let restWithoutBracket = popChar "}" rest
             in if isJust restWithoutBracket then
                 (Just [fromJust pair], fromJust restWithoutBracket)
             else (Nothing, context)
-    else let restWithoutBracket = popChar "]" rest
+    else let restWithoutBracket = popChar "}" rest
         in if isJust restWithoutBracket then
             (Just [fromJust pair], fromJust restWithoutBracket)
         else (Nothing, context)

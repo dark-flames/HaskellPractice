@@ -2,7 +2,6 @@ module JsonTest(jsonTestCases) where
 
 import Test.HUnit
 import Json
-
 testCaseShow = JsonObject [
     ("List1", JsonList [JsonBool True, JsonBool False, JsonNull, JsonNumber 114514]),
     ("List2", JsonList [JsonList [JsonBool True, JsonBool False], JsonObject [("a", JsonString "a")]]),
@@ -22,7 +21,13 @@ getAsStrTest2 = TestCase (assertEqual "Test get as str" (Just "abc" , "d") (getA
 getAsNumTest1 = TestCase (assertEqual "Test get as num" ("114.514" , "asdasd") (getAsNum "114.514asdasd"))
 getAsNumTest2 = TestCase (assertEqual "Test get as num" ("114.514" , "") (getAsNum "114.514"))
 
-getAsNumTest3= TestCase (assertEqual "Test get as num" ("" , "aa114.514") (getAsNum "aa114.514"))
+getAsNumTest3 = TestCase (assertEqual "Test get as num" ("" , "aa114.514") (getAsNum "aa114.514"))
+
+testParse = TestCase (assertEqual "Test parse" (Just testCaseShow, "") (getItem testCaseShowResult))
+
+testPopChar = TestCase (assertEqual "Test pop char" Nothing (popChar "," "]"))
+
+testReadPair = TestCase (assertEqual "Test read pair" (Just ("a", JsonNumber 1), ",sdasd") (readPair "\"a\": 1,sdasd"))
 
 jsonTestCases = [
     showTest,
@@ -33,4 +38,7 @@ jsonTestCases = [
     getAsStrTest2,
     getAsNumTest1,
     getAsNumTest2,
-    getAsNumTest3]
+    getAsNumTest3,
+    testPopChar,
+    testReadPair,
+    testParse]
