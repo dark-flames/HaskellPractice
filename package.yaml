@@ -30,6 +30,7 @@ library:
     - List
     - Convert
     - Json
+    - CodewarsProblems
 
 tests:
   unit-test:

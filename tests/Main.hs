@@ -5,6 +5,7 @@ import SpliteLinesTest
 import ListTest
 import ConvertTest
 import JsonTest
+import CodewarsTest
 import Test.HUnit
 
 main :: IO Counts
@@ -13,5 +14,6 @@ main = runTestTT (TestList (
     spliteLinesCases ++
     listTestCases ++
     convertTestCases ++
-    jsonTestCases
+    jsonTestCases ++
+    codewarsTestCases
     ))
