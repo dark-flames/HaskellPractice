@@ -1,4 +1,7 @@
-module CodewarsProblems(duplicateCount, sortOdd) where
+module CodewarsProblems(
+  duplicateCount,
+  sortOdd,
+  maxSequence) where
 
 import Data.List 
 import Data.Maybe
@@ -20,3 +23,7 @@ fillList (item:list) (oddItem:oddRest) = if (odd item) then
 
 sortOdd :: [Int] -> [Int]
 sortOdd list = fst (fillList list (sort (filter odd list)))
+
+-- sum[i] = max{sum[i-1] + value[i], value[i]}
+maxSequence :: [Int] -> Int
+maxSequence = maximum . scanl (\acc item -> max item (acc + item)) 0
